@@ -1,0 +1,927 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comprar Robux - Roblox</title>
+<link rel="icon" href="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/d5cd3421-23b6-4dbe-9f4d-63ba1d01b818.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+<style>
+:root{
+  --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Helvetica,Arial,sans-serif;
+  --mono:'JetBrains Mono','SF Mono','Monaco',monospace;
+  --text-1:#232527;--text-2:#6B6E72;--text-3:#8F9296;
+  --surface-0:#FFFFFF;--surface-1:#F7F8F9;--surface-2:#F1F3F5;--surface-3:#E4E7EA;
+  --stroke:#E3E5E8;--stroke-2:#D6D9DD;
+  --blue:#335FFF;--blue-hover:#2A4FD8;--red:#D74A4A;
+  --shadow-1:0 1px 2px rgba(0,0,0,.04), 0 2px 6px rgba(0,0,0,.04);
+  --shadow-2:0 2px 4px rgba(0,0,0,.05), 0 6px 16px rgba(0,0,0,.06);
+  --shadow-3:0 4px 8px rgba(0,0,0,.06), 0 12px 28px rgba(0,0,0,.10);
+  --shadow-4:0 8px 16px rgba(0,0,0,.08), 0 24px 48px rgba(0,0,0,.14);
+  --shadow-modal:0 12px 24px rgba(0,0,0,.12), 0 32px 72px rgba(0,0,0,.20);
+  --shadow-focus:0 0 0 3px rgba(51,95,255,.22);
+  --ease-out:cubic-bezier(.22,1,.36,1);
+  --ease-bounce:cubic-bezier(.34,1.56,.64,1);
+  --d-bg:#000000;--d-card:#0A0A0B;--d-border:rgba(255,255,255,.06);--d-border-2:rgba(255,255,255,.09);--d-border-3:rgba(255,255,255,.12);
+  --d-text:#EDEDED;--d-text-2:#A1A1AA;--d-text-3:#71717A;--d-text-4:#52525B;
+  --d-green:#22C55E;--d-green-soft:rgba(34,197,94,.10);
+}
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:var(--font);font-size:16px;font-weight:500;line-height:1.4;color:var(--text-1);background:var(--surface-0);-webkit-font-smoothing:antialiased;padding-bottom:40px}
+body.locked{overflow:hidden}
+body.locked .site,body.locked .toast,body.locked .robux-popover,body.locked .key-overlay,body.locked .cfg-overlay{display:none!important}
+a{text-decoration:none;color:inherit}
+button{font-family:inherit;background:none;border:none;cursor:pointer;color:inherit}
+ul{list-style:none}
+img{display:block}
+input{font-family:inherit}
+@keyframes ripple{from{transform:scale(0);opacity:.45}to{transform:scale(2.5);opacity:0}}
+@keyframes balancePulse{0%{transform:scale(1)}35%{transform:scale(1.18);color:#00B06B}100%{transform:scale(1)}}
+@keyframes checkBounce{0%{transform:scale(0);opacity:0}55%{transform:scale(1.18);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes toastIn{0%{opacity:0;transform:translate(-50%,24px) scale(.94)}100%{opacity:1;transform:translate(-50%,0) scale(1)}}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+@keyframes revealMain{from{opacity:0;transform:translateY(20px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes pulseDot{0%,100%{opacity:1}50%{opacity:.4}}
+.site{opacity:0;visibility:hidden;transition:opacity .5s,visibility .5s}
+.site.unlocked{opacity:1;visibility:visible;animation:revealMain .55s var(--ease-out) both}
+.topbar{position:sticky;top:0;background:#fff;border-bottom:1px solid var(--stroke);z-index:100;box-shadow:0 2px 8px rgba(0,0,0,.03)}
+.topbar-inner{display:flex;align-items:center;gap:8px;padding:8px 12px 8px 4px}
+.icon-btn{width:36px;height:36px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--text-1);font-size:17px;flex-shrink:0;transition:background .2s,transform .18s}
+.icon-btn:hover{background:var(--surface-2)}
+.gear-btn i{transition:transform .4s var(--ease-bounce)}
+.gear-btn:hover i{transform:rotate(90deg)}
+.logo{display:flex;align-items:center;justify-content:center;width:48px;height:48px;border-radius:10px;flex-shrink:0;margin-left:-2px;transition:all .22s}
+.logo:hover{background:var(--surface-2);transform:scale(1.06)}
+.logo img{width:42px;height:42px;object-fit:contain}
+.search{flex:1;display:flex;align-items:center;gap:8px;height:36px;padding:0 12px;background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;min-width:0;transition:all .2s}
+.search:focus-within{background:#fff;border-color:var(--blue);box-shadow:var(--shadow-focus)}
+.search.cmd-mode{background:#FFEEEE;border-color:#EF4444;box-shadow:0 0 0 3px rgba(239,68,68,.18)}
+.search.cmd-mode i{color:#EF4444}
+.search i{font-size:14px;color:var(--text-3)}
+.search input{flex:1;min-width:0;border:none;outline:none;background:transparent;font-size:14px;color:var(--text-1)}
+.search input::placeholder{color:var(--text-3)}
+.search.cmd-mode input{color:#DC2626;font-weight:700;font-family:var(--mono)}
+.avatar{width:32px;height:32px;border-radius:50%;overflow:hidden;flex-shrink:0;cursor:pointer;background:#E4E7EA;border:1.5px solid var(--stroke);transition:transform .22s}
+.avatar:hover{transform:scale(1.08)}
+.avatar img{width:100%;height:100%;object-fit:cover}
+.tabs{display:flex;padding:0 12px;gap:4px;border-bottom:1px solid var(--stroke);overflow-x:auto;scrollbar-width:none}
+.tabs::-webkit-scrollbar{display:none}
+.tab{position:relative;padding:12px 14px;font-size:14px;font-weight:600;color:var(--text-2);white-space:nowrap;transition:color .2s}
+.tab::after{content:'';position:absolute;left:14px;right:14px;bottom:-1px;height:2px;background:var(--text-1);border-radius:2px 2px 0 0;transform:scaleX(0);transform-origin:left;transition:transform .28s var(--ease-out)}
+.tab:hover{color:var(--text-1)}
+.tab.active{color:var(--text-1);font-weight:700}
+.tab.active::after{transform:scaleX(1)}
+.main{max-width:820px;margin:0 auto;padding:0 16px 48px}
+.actions{display:flex;align-items:center;justify-content:flex-end;gap:8px;padding:12px 0 0}
+.robux-pill{display:flex;align-items:center;gap:6px;height:34px;padding:0 12px;background:var(--surface-2);border-radius:100px;font-size:13px;font-weight:700;flex-shrink:0;font-variant-numeric:tabular-nums;transition:all .2s}
+.robux-pill:hover{background:var(--surface-3);transform:translateY(-1px)}
+.robux-pill img{width:16px;height:16px;object-fit:contain}
+.balance-pulse{animation:balancePulse .7s var(--ease-bounce)}
+.btn-send{position:relative;display:inline-flex;align-items:center;gap:6px;height:34px;padding:0 14px;background:var(--surface-2);border-radius:100px;font-size:13px;font-weight:700;color:var(--text-1);overflow:hidden;transition:all .2s;border:1px solid var(--stroke)}
+.btn-send:hover{background:var(--surface-3);transform:translateY(-1px)}
+.btn-send i{font-size:12px}
+.btn-send .ripple-el{background:rgba(0,0,0,.08)}
+.ripple-el{position:absolute;border-radius:50%;pointer-events:none;background:rgba(255,255,255,.55);transform:scale(0);animation:ripple .6s var(--ease-out) forwards}
+.page-title{font-size:32px;font-weight:800;letter-spacing:-.8px;line-height:1.1;margin:16px 0 28px;animation:fadeIn .5s var(--ease-out) both}
+.section-title{font-size:22px;font-weight:800;letter-spacing:-.4px;margin-bottom:14px}
+.section-title.with-icon{display:flex;align-items:center;gap:10px}
+.plus-icon{width:26px;height:26px;object-fit:contain;flex-shrink:0}
+.section-head{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:14px}
+.section-head .section-title{margin-bottom:0}
+.link-saiba{color:var(--blue);font-size:14px;font-weight:600}
+.link-saiba:hover{text-decoration:underline}
+.packages{background:#fff;border:1px solid var(--stroke);border-radius:12px;overflow:hidden;margin-bottom:36px;box-shadow:var(--shadow-1);transition:box-shadow .3s}
+.packages:hover{box-shadow:var(--shadow-2)}
+.pkg-row{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--stroke);transition:background .18s}
+.pkg-row:last-child{border-bottom:none}
+.pkg-row:hover{background:var(--surface-1)}
+.pkg-amount{flex:1;display:flex;align-items:center;gap:8px;font-size:18px;font-weight:800;letter-spacing:-.3px;min-width:0;flex-wrap:wrap;font-variant-numeric:tabular-nums}
+.pkg-amount img{width:18px;height:18px;object-fit:contain;flex-shrink:0}
+.pkg-amount .old{font-size:14px;font-weight:600;color:var(--text-3);text-decoration:line-through;display:inline-flex;align-items:center;gap:4px}
+.pkg-amount .old img{width:13px;height:13px;opacity:.55}
+.badge-foryou{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 9px;background:var(--surface-2);border-radius:100px;font-size:11px;font-weight:700;color:var(--text-1)}
+.badge-foryou::before{content:'';width:11px;height:11px;border-radius:50%;border:1.5px solid var(--text-1);box-sizing:border-box}
+.pkg-price{position:relative;flex-shrink:0;min-width:120px;height:40px;padding:0 16px;background:var(--surface-2);border-radius:8px;font-size:15px;font-weight:700;color:var(--text-1);overflow:hidden;font-variant-numeric:tabular-nums;transition:all .2s}
+.pkg-price:hover{background:var(--surface-3);transform:translateY(-1px)}
+.pkg-row.featured .pkg-price{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(51,95,255,.22)}
+.pkg-row.featured .pkg-price:hover{background:var(--blue-hover)}
+.plans-wrap{position:relative;margin-bottom:44px}
+.plans{display:flex;gap:12px;overflow-x:auto;scroll-snap-type:x mandatory;padding-bottom:4px;scrollbar-width:none}
+.plans::-webkit-scrollbar{display:none}
+.plan{flex:0 0 200px;scroll-snap-align:start;background:#fff;border:1px solid var(--stroke);border-radius:12px;padding:16px;display:flex;flex-direction:column;box-shadow:var(--shadow-1);transition:all .3s}
+.plan:hover{border-color:var(--stroke-2);box-shadow:var(--shadow-3);transform:translateY(-4px)}
+.plan-title{font-size:16px;font-weight:800;margin-bottom:6px;letter-spacing:-.3px}
+.plan-price-row{display:flex;align-items:baseline;gap:6px;flex-wrap:wrap;margin-bottom:14px}
+.plan-price-row .old{font-size:12px;font-weight:600;color:var(--text-3);text-decoration:line-through}
+.plan-price-row .current{font-size:15px;font-weight:800}
+.plan-features{flex:1;display:flex;flex-direction:column;gap:10px;margin-bottom:16px}
+.plan-features li{display:flex;align-items:flex-start;gap:10px;font-size:13px;line-height:1.35;color:var(--text-2)}
+.plan-features li i{flex-shrink:0;width:18px;font-size:13px;color:var(--text-1);text-align:center;margin-top:1px}
+.plan-features li img{flex-shrink:0;width:16px;height:16px;object-fit:contain;margin-top:1px}
+.plan-btn{position:relative;width:100%;height:38px;background:var(--surface-2);border-radius:8px;font-size:13px;font-weight:700;color:var(--text-1);overflow:hidden;transition:all .2s}
+.plan-btn:hover{background:var(--surface-3)}
+.carousel-arrow{position:absolute;top:50%;right:-6px;transform:translateY(-50%);width:38px;height:38px;border-radius:50%;background:var(--text-1);color:#fff;display:flex;align-items:center;justify-content:center;font-size:14px;box-shadow:var(--shadow-2);z-index:2;transition:all .2s}
+.carousel-arrow:hover{background:#000;transform:translateY(-50%) scale(1.08)}
+.faq{display:flex;flex-direction:column;gap:8px;margin-bottom:44px}
+.faq-item{border:1px solid var(--stroke);border-radius:8px;background:#fff;overflow:hidden;box-shadow:var(--shadow-1);transition:all .25s}
+.faq-item:hover{border-color:var(--stroke-2);box-shadow:var(--shadow-2)}
+.faq-q{display:flex;align-items:center;justify-content:space-between;gap:14px;width:100%;padding:16px;text-align:left;font-size:15px;font-weight:600;color:var(--text-1)}
+.faq-q:hover{color:var(--blue)}
+.faq-q i{font-size:12px;color:var(--text-2);flex-shrink:0;transition:transform .3s,color .2s}
+.faq-item.active .faq-q i{transform:rotate(180deg);color:var(--blue)}
+.faq-a{max-height:0;overflow:hidden;padding:0 16px;font-size:14px;line-height:1.6;color:var(--text-2);transition:max-height .32s,padding .32s,opacity .25s;opacity:0}
+.faq-item.active .faq-a{max-height:260px;padding:0 16px 18px;opacity:1}
+.footer{border-top:1px solid var(--stroke);padding:28px 16px 24px;background:#fff}
+.footer-inner{max-width:820px;margin:0 auto}
+.footer-cols{display:grid;grid-template-columns:repeat(5,1fr);gap:16px 12px;margin-bottom:28px}
+.footer-cols a{font-size:13px;font-weight:500;color:var(--text-1);display:inline-block;transition:all .18s}
+.footer-cols a:hover{color:var(--blue);text-decoration:underline}
+.footer-bottom{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:16px;padding-top:20px;border-top:1px solid var(--stroke);font-size:12px;color:var(--text-2)}
+.lang-select{position:relative;display:flex;align-items:center;min-width:190px}
+.lang-select select{width:100%;height:40px;padding:0 36px 0 14px;border:1px solid var(--stroke);border-radius:8px;background:#fff;font-size:13px;cursor:pointer;appearance:none;outline:none}
+.lang-select::after{content:'\f078';font-family:'Font Awesome 6 Free';font-weight:900;position:absolute;right:14px;font-size:11px;color:var(--text-2);pointer-events:none}
+.copyright{flex:1;min-width:240px;text-align:right;line-height:1.5;color:var(--text-3)}
+.robux-popover{position:fixed;top:64px;right:12px;width:280px;background:#fff;border:1px solid var(--stroke);border-radius:12px;box-shadow:var(--shadow-4);padding:16px;z-index:300;opacity:0;visibility:hidden;transform:translateY(-6px) scale(.96);transform-origin:top right;transition:all .28s}
+.robux-popover.open{opacity:1;visibility:visible;transform:translateY(0) scale(1)}
+.popover-label{font-size:11px;font-weight:800;letter-spacing:.6px;text-transform:uppercase;color:var(--text-3);margin-bottom:10px}
+.popover-balance{display:flex;align-items:center;gap:10px;padding-bottom:14px;margin-bottom:14px;border-bottom:1px solid var(--stroke)}
+.popover-balance img{width:36px;height:36px;object-fit:contain}
+.popover-balance .value{font-size:26px;font-weight:800;line-height:1}
+.popover-balance .value small{display:block;font-size:12px;font-weight:500;color:var(--text-2);margin-top:4px}
+.popover-btn{position:relative;width:100%;height:40px;background:var(--blue);color:#fff;border-radius:8px;font-size:14px;font-weight:700;overflow:hidden;transition:all .2s;box-shadow:0 4px 12px rgba(51,95,255,.2)}
+.popover-btn:hover{background:var(--blue-hover)}
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px;z-index:900;opacity:0;visibility:hidden;transition:all .24s;backdrop-filter:blur(2px)}
+.modal-overlay.open{opacity:1;visibility:visible}
+.modal{width:100%;max-width:440px;background:#fff;border-radius:12px;box-shadow:var(--shadow-modal);overflow:hidden;max-height:calc(100vh - 32px);display:flex;flex-direction:column;transform:translateY(20px) scale(.96);transition:transform .32s var(--ease-bounce)}
+.modal-overlay.open .modal{transform:translateY(0) scale(1)}
+.modal-header{display:flex;justify-content:space-between;gap:12px;padding:18px 20px;border-bottom:1px solid var(--stroke)}
+.modal-title{font-size:18px;font-weight:800;letter-spacing:-.3px}
+.modal-close{width:32px;height:32px;display:flex;align-items:center;justify-content:center;border-radius:8px;color:var(--text-2);font-size:16px;transition:all .18s}
+.modal-close:hover{background:var(--surface-2);transform:rotate(90deg)}
+.modal-body{padding:20px;overflow-y:auto;flex:1}
+.field{margin-bottom:16px}
+.field-label{display:block;font-size:13px;font-weight:700;color:var(--text-1);margin-bottom:6px}
+.field-input{display:flex;align-items:center;gap:8px;height:44px;padding:0 12px;background:var(--surface-2);border:1.5px solid transparent;border-radius:8px;transition:all .2s}
+.field-input:focus-within{background:#fff;border-color:var(--blue);box-shadow:var(--shadow-focus)}
+.field-input.error{border-color:var(--red);background:#FDF2F2}
+.field-input .prefix{font-size:15px;font-weight:700;color:var(--text-3);flex-shrink:0}
+.field-input .prefix img{width:20px;height:20px;object-fit:contain}
+.field-input input{flex:1;border:none;outline:none;background:transparent;font-size:15px;font-weight:600;color:var(--text-1)}
+.field-error{font-size:12px;color:var(--red);margin-top:6px;font-weight:600;display:none}
+.field-error.show{display:block}
+.balance-box{display:flex;justify-content:space-between;gap:10px;padding:12px 14px;background:var(--surface-1);border-radius:8px;margin-bottom:20px}
+.balance-box .label{display:flex;align-items:center;gap:8px;font-size:13px;font-weight:600;color:var(--text-2)}
+.balance-box .label img{width:16px;height:16px;object-fit:contain}
+.balance-box .value{font-size:15px;font-weight:800}
+.quick-amounts{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+.quick-btn{height:30px;padding:0 12px;background:var(--surface-2);border-radius:100px;font-size:12px;font-weight:700;color:var(--text-1);transition:all .16s}
+.quick-btn:hover{background:var(--surface-3)}
+.modal-footer{display:flex;gap:10px;padding:16px 20px;border-top:1px solid var(--stroke)}
+.modal-footer .btn{position:relative;flex:1;height:44px;border-radius:8px;font-size:14px;font-weight:700;overflow:hidden;transition:all .2s}
+.btn-cancel{background:var(--surface-2);color:var(--text-1)}
+.btn-cancel:hover{background:var(--surface-3)}
+.btn-confirm{background:var(--blue);color:#fff;box-shadow:0 4px 12px rgba(51,95,255,.22)}
+.btn-confirm:hover{background:var(--blue-hover)}
+.btn-confirm:disabled{background:var(--surface-3);color:var(--text-3);cursor:not-allowed;box-shadow:none}
+.success-view{display:none;flex-direction:column;align-items:center;text-align:center;padding:36px 20px}
+.success-view.show{display:flex;animation:fadeIn .3s}
+.success-icon{width:64px;height:64px;border-radius:50%;background:#E6F9F0;color:#00B06B;display:flex;align-items:center;justify-content:center;font-size:28px;margin-bottom:16px;animation:checkBounce .6s var(--ease-bounce);box-shadow:0 4px 12px rgba(0,176,107,.18)}
+.success-title{font-size:20px;font-weight:800;margin-bottom:6px}
+.success-msg{font-size:14px;color:var(--text-2);line-height:1.5;margin-bottom:24px}
+.success-msg strong{color:var(--text-1);font-weight:800}
+.toast{position:fixed;left:50%;bottom:28px;display:flex;align-items:center;gap:10px;padding:13px 18px;background:#18181B;color:#fff;font-size:14px;font-weight:600;border-radius:10px;border:1px solid rgba(255,255,255,.08);box-shadow:0 20px 40px rgba(0,0,0,.5);opacity:0;pointer-events:none;transform:translate(-50%,24px) scale(.94);transition:all .3s;z-index:2400;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translate(-50%,0) scale(1);animation:toastIn .4s var(--ease-bounce)}
+.toast i{color:#4ADE80}
+.key-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:24px;z-index:1000;opacity:0;visibility:hidden;transition:opacity .3s var(--ease-out),visibility .3s;backdrop-filter:blur(16px) saturate(140%);-webkit-backdrop-filter:blur(16px) saturate(140%)}
+.key-overlay.open{opacity:1;visibility:visible}
+.key-dashboard{width:100%;max-width:640px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;max-height:calc(100vh - 48px);display:flex;flex-direction:column;box-shadow:0 0 0 1px rgba(0,0,0,.5),0 32px 72px rgba(0,0,0,.8);transform:translateY(16px) scale(.97);transition:transform .4s var(--ease-out);position:relative;color:var(--d-text)}
+.key-overlay.open .key-dashboard{transform:translateY(0) scale(1)}
+.key-header{display:flex;align-items:center;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--d-border);background:var(--d-bg);flex-shrink:0}
+.key-header-left{display:flex;align-items:center;gap:12px;min-width:0}
+.key-logo{width:36px;height:36px;border-radius:9px;flex-shrink:0;background:linear-gradient(135deg,#EF4444,#B91C1C);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px;box-shadow:0 0 0 1px rgba(255,255,255,.1),0 2px 8px rgba(239,68,68,.3),inset 0 1px 0 rgba(255,255,255,.2)}
+.key-title{font-size:13.5px;font-weight:700;letter-spacing:-.1px;color:#fff;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.key-subtitle{font-size:11px;font-weight:500;color:var(--d-text-3);margin-top:2px;display:flex;align-items:center;gap:6px}
+.key-subtitle .dot{width:6px;height:6px;border-radius:50%;background:var(--d-green);box-shadow:0 0 6px rgba(34,197,94,.8);animation:pulseDot 2s ease-in-out infinite}
+.key-header-right{display:flex;align-items:center;gap:8px;flex-shrink:0}
+.key-tier-badge{display:inline-flex;align-items:center;gap:6px;height:26px;padding:0 10px;border-radius:6px;font-size:11px;font-weight:600;letter-spacing:.2px;background:rgba(255,255,255,.04);border:1px solid var(--d-border-2);color:var(--d-text-2);text-transform:uppercase}
+.key-tier-badge i{font-size:10px;color:var(--d-text-3)}
+.key-tier-badge.gold{background:rgba(245,158,11,.1);border-color:rgba(245,158,11,.28);color:#FBBF24}
+.key-tier-badge.gold i{color:#FBBF24}
+.key-close{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;background:transparent;border:1px solid var(--d-border);color:var(--d-text-3);font-size:13px;transition:all .2s var(--ease-out)}
+.key-close:hover{background:rgba(255,255,255,.04);border-color:var(--d-border-3);color:#fff}
+.key-body{padding:20px;overflow-y:auto;flex:1;display:flex;flex-direction:column;gap:16px}
+.section-label{font-size:11px;font-weight:600;letter-spacing:.4px;color:var(--d-text-3);margin-bottom:10px;text-transform:uppercase}
+.key-card{background:var(--d-card);border:1px solid var(--d-border);border-radius:12px;padding:16px}
+.key-row{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.key-row-title{font-size:12px;font-weight:600;color:var(--d-text-2);display:flex;align-items:center;gap:8px}
+.key-row-title i{color:var(--d-text-3);font-size:12px}
+.key-status-pill{display:inline-flex;align-items:center;gap:6px;height:22px;padding:0 9px;border-radius:100px;font-size:10.5px;font-weight:600;background:var(--d-green-soft);border:1px solid rgba(34,197,94,.25);color:#4ADE80}
+.key-status-pill .status-dot{width:6px;height:6px;border-radius:50%;background:var(--d-green);box-shadow:0 0 6px rgba(34,197,94,.9)}
+.key-code-box{display:flex;align-items:center;gap:10px;background:rgba(0,0,0,.6);border:1px solid var(--d-border);border-radius:10px;padding:14px 14px 14px 16px}
+.key-code-text{flex:1;min-width:0;font-family:var(--mono);font-size:15px;font-weight:600;letter-spacing:2px;color:#fff;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.key-copy-btn{width:32px;height:32px;border-radius:8px;flex-shrink:0;display:flex;align-items:center;justify-content:center;background:rgba(255,255,255,.04);border:1px solid var(--d-border);color:var(--d-text-2);font-size:12px;transition:all .18s var(--ease-out)}
+.key-copy-btn:hover{background:rgba(255,255,255,.08);border-color:var(--d-border-3);color:#fff}
+.info-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--d-border);border:1px solid var(--d-border);border-radius:12px;overflow:hidden}
+.info-cell{background:var(--d-card);padding:14px 16px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.info-label{font-size:10.5px;font-weight:500;color:var(--d-text-3);letter-spacing:.3px;text-transform:uppercase;display:flex;align-items:center;gap:6px}
+.info-label i{font-size:10px}
+.info-value{font-size:16px;font-weight:700;color:#fff;letter-spacing:-.3px;font-variant-numeric:tabular-nums;display:flex;align-items:baseline;gap:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.info-value small{font-size:11px;font-weight:500;color:var(--d-text-2)}
+.info-value.mono{font-family:var(--mono);font-size:13px;letter-spacing:1px}
+.info-foot{font-size:10.5px;color:var(--d-text-4);margin-top:2px;font-weight:500}
+.progress-box{background:var(--d-card);border:1px solid var(--d-border);border-radius:12px;padding:16px}
+.progress-header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:12px}
+.progress-title{font-size:12.5px;font-weight:600;color:var(--d-text);display:flex;align-items:center;gap:8px}
+.progress-title i{color:var(--d-text-3);font-size:12px}
+.progress-value{font-size:12px;font-weight:600;color:var(--d-text-2);font-variant-numeric:tabular-nums}
+.progress-track{height:6px;border-radius:100px;background:rgba(255,255,255,.05);overflow:hidden}
+.progress-fill{height:100%;border-radius:100px;background:linear-gradient(90deg,#DC2626,#EF4444);transition:width 1s var(--ease-out)}
+.progress-fill.soft{background:linear-gradient(90deg,#52525B,#71717A)}
+.progress-footer{display:flex;justify-content:space-between;gap:8px;margin-top:10px;font-size:11px;font-weight:500;color:var(--d-text-3);font-variant-numeric:tabular-nums}
+.actions-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.action-btn{position:relative;height:44px;border-radius:10px;font-size:13px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;overflow:hidden;transition:all .18s var(--ease-out);border:1px solid transparent}
+.action-btn i{font-size:13px}
+.action-btn-primary{background:#EF4444;border-color:#EF4444;color:#fff;box-shadow:0 1px 2px rgba(0,0,0,.3), 0 4px 12px rgba(239,68,68,.2)}
+.action-btn-primary:hover{background:#DC2626;border-color:#DC2626;box-shadow:0 6px 20px rgba(239,68,68,.35);transform:translateY(-1px)}
+.action-btn-primary .ripple-el{background:rgba(255,255,255,.3)}
+.action-btn-ghost{background:transparent;border-color:var(--d-border-2);color:var(--d-text-2)}
+.action-btn-ghost:hover{background:rgba(255,255,255,.04);border-color:var(--d-border-3);color:#fff}
+.cfg-overlay{position:fixed;inset:0;background:rgba(0,0,0,.85);display:flex;align-items:center;justify-content:center;padding:16px;z-index:2000;opacity:0;visibility:hidden;transition:all .3s;backdrop-filter:blur(14px)}
+.cfg-overlay.open{opacity:1;visibility:visible}
+.cfg-card{width:100%;max-width:520px;background:#000;border:1px solid rgba(255,255,255,.08);border-radius:16px;overflow:hidden;max-height:calc(100vh - 32px);display:flex;flex-direction:column;box-shadow:0 32px 72px rgba(0,0,0,.8);transform:translateY(20px) scale(.96);transition:transform .4s var(--ease-bounce);color:#EDEDED}
+.cfg-overlay.open .cfg-card{transform:translateY(0) scale(1)}
+.cfg-header{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--d-border);background:#0A0A0B;flex-shrink:0}
+.cfg-header-left{display:flex;align-items:center;gap:12px}
+.cfg-logo{width:36px;height:36px;border-radius:9px;background:linear-gradient(135deg,#EF4444,#B91C1C);display:flex;align-items:center;justify-content:center;color:#fff;font-size:15px}
+.cfg-title{font-size:13.5px;font-weight:700;color:#fff}
+.cfg-subtitle{font-size:11px;font-weight:500;color:var(--d-text-3);margin-top:2px;display:flex;align-items:center;gap:6px}
+.cfg-subtitle .dot{width:6px;height:6px;border-radius:50%;background:#EF4444;animation:pulseDot 2s ease-in-out infinite}
+.cfg-close{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;color:var(--d-text-3);font-size:13px}
+.cfg-close:hover{background:rgba(255,255,255,.04);color:#fff}
+.cfg-body{padding:20px;overflow-y:auto;flex:1}
+.cfg-balance{margin-bottom:18px;padding:16px;background:var(--d-card);border:1px solid var(--d-border);border-radius:12px}
+.cfg-balance-label{font-size:11px;font-weight:500;color:var(--d-text-3);margin-bottom:10px;text-transform:uppercase;letter-spacing:.4px;display:flex;align-items:center;gap:6px}
+.cfg-balance-value{display:flex;align-items:center;gap:12px}
+.cfg-balance-value img{width:32px;height:32px;object-fit:contain}
+.cfg-balance-value .num{font-size:26px;font-weight:800;color:#fff;line-height:1;font-variant-numeric:tabular-nums}
+.cfg-balance-value .num small{display:block;font-size:11px;font-weight:500;color:var(--d-text-3);margin-top:4px;text-transform:uppercase}
+.cfg-section{margin-bottom:18px}
+.cfg-section-title{font-size:11px;font-weight:600;color:var(--d-text-3);margin-bottom:10px;display:flex;align-items:center;gap:8px;text-transform:uppercase}
+.cfg-section-title .tag{margin-left:auto;font-size:9.5px;padding:2px 7px;border-radius:100px;background:var(--d-red-soft);color:#FCA5A5;border:1px solid var(--d-red-border);font-weight:600}
+.cfg-field{display:flex;align-items:center;gap:10px;height:48px;padding:0 14px;background:rgba(0,0,0,.5);border:1px solid var(--d-border-2);border-radius:10px;margin-bottom:10px}
+.cfg-field:focus-within{border-color:rgba(239,68,68,.5);box-shadow:0 0 0 3px rgba(239,68,68,.12)}
+.cfg-field .icon{width:22px;height:22px;flex-shrink:0;display:flex;align-items:center;justify-content:center;color:var(--d-text-3);font-size:13px}
+.cfg-field input{flex:1;border:none;outline:none;background:transparent;font-size:16px;font-weight:700;color:#fff;font-family:var(--mono);letter-spacing:1px}
+.cfg-field .suffix{font-size:11px;font-weight:600;color:var(--d-text-3);text-transform:uppercase}
+.cfg-quick{display:grid;grid-template-columns:repeat(4,1fr);gap:6px;margin-bottom:14px}
+.cfg-quick-btn{height:40px;border-radius:9px;font-size:12px;font-weight:600;color:var(--d-text-2);background:rgba(255,255,255,.03);border:1px solid var(--d-border);transition:all .18s}
+.cfg-quick-btn:hover{background:rgba(255,255,255,.06);border-color:var(--d-border-2);color:#fff}
+.cfg-add{width:100%;height:46px;border-radius:10px;font-size:13.5px;font-weight:600;display:inline-flex;align-items:center;justify-content:center;gap:8px;color:#fff;background:#EF4444;border:1px solid #EF4444;transition:all .18s}
+.cfg-add:hover{background:#DC2626;border-color:#DC2626;transform:translateY(-1px)}
+.cfg-add:disabled{opacity:.4;cursor:not-allowed;transform:none}
+.cfg-div{height:1px;margin:18px 0;background:var(--d-border)}
+.cfg-danger{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 16px;background:var(--d-card);border:1px solid var(--d-border);border-radius:12px}
+.cfg-danger-info{display:flex;align-items:center;gap:12px}
+.cfg-danger-icon{width:32px;height:32px;border-radius:9px;display:flex;align-items:center;justify-content:center;background:var(--d-red-soft);color:#F87171;font-size:13px;border:1px solid var(--d-red-border)}
+.cfg-danger-title{font-size:12.5px;font-weight:600;color:#fff;margin-bottom:2px}
+.cfg-danger-desc{font-size:11px;color:var(--d-text-3);font-weight:500}
+.cfg-danger-btn{height:32px;padding:0 14px;border-radius:8px;font-size:11.5px;font-weight:600;background:transparent;color:#F87171;border:1px solid var(--d-red-border)}
+.cfg-danger-btn:hover{background:var(--d-red-soft);color:#FCA5A5}
+.cfg-info{display:flex;gap:10px;padding:12px 14px;margin-top:16px;background:rgba(255,255,255,.02);border:1px solid var(--d-border);border-radius:10px;font-size:11.5px;line-height:1.55;color:var(--d-text-3)}
+.cfg-info i{color:var(--d-text-4);font-size:12px;flex-shrink:0;margin-top:1px}
+.cfg-info code{background:rgba(255,255,255,.05);padding:2px 6px;border-radius:4px;font-family:var(--mono);font-size:10.5px;color:#EDEDED;border:1px solid var(--d-border);font-weight:600}
+@media (max-width:640px){
+  .page-title{font-size:26px;letter-spacing:-.5px}
+  .section-title{font-size:19px}
+  .pkg-amount{font-size:16px}
+  .pkg-price{min-width:104px;font-size:14px;height:38px;padding:0 12px}
+  .footer-cols{grid-template-columns:repeat(2,1fr)}
+  .copyright{text-align:left}
+  .modal-overlay{align-items:flex-end;padding:0}
+  .modal{max-width:100%;border-radius:16px 16px 0 0;max-height:90vh;transform:translateY(100%)}
+  .modal-overlay.open .modal{transform:translateY(0)}
+  .topbar-inner{padding:6px 10px 6px 2px;gap:6px}
+  .logo{width:44px;height:44px}
+  .logo img{width:38px;height:38px}
+  .robux-pill{height:32px;padding:0 10px;font-size:12px}
+  .robux-pill img{width:14px;height:14px}
+  .btn-send{height:32px;padding:0 12px;font-size:12px}
+  .key-overlay{padding:0;align-items:flex-end}
+  .key-dashboard{max-width:100%;border-radius:16px 16px 0 0;max-height:94vh}
+  .key-header{padding:16px}
+  .key-body{padding:16px;padding-bottom:max(20px,env(safe-area-inset-bottom))}
+  .info-grid{grid-template-columns:repeat(2,1fr)}
+  .info-grid .info-cell:nth-child(3){grid-column:1/-1;border-left:none;border-top:1px solid var(--d-border)}
+  .actions-grid{grid-template-columns:1fr}
+  .key-code-text{font-size:13px;letter-spacing:1.5px}
+  .cfg-overlay{padding:0;align-items:flex-end}
+  .cfg-card{max-width:100%;border-radius:16px 16px 0 0}
+  .cfg-quick{grid-template-columns:repeat(3,1fr)}
+}
+@media (max-width:380px){
+  .info-grid{grid-template-columns:1fr}
+  .info-grid .info-cell:nth-child(2){border-left:none;border-top:1px solid var(--d-border)}
+  .cfg-quick{grid-template-columns:repeat(2,1fr)}
+  .key-tier-badge{display:none}
+}
+@media (min-width:900px){
+  .topbar-inner,.tabs{max-width:1200px;margin:0 auto}
+  .main,.footer-inner{max-width:900px}
+  .plans{overflow:visible;flex-wrap:wrap}
+  .plan{flex:1 1 220px}
+  .carousel-arrow{display:none}
+}
+</style>
+</head>
+<body class="locked">
+
+<div class="site" id="site">
+<header class="topbar">
+  <div class="topbar-inner">
+    <button class="icon-btn"><i class="fas fa-bars"></i></button>
+    <a href="#" class="logo"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/d5cd3421-23b6-4dbe-9f4d-63ba1d01b818.png" alt="Roblox"></a>
+    <label class="search" id="searchWrap"><i class="fas fa-magnifying-glass"></i><input type="text" id="searchInput" placeholder="Pesquisa" autocomplete="off"></label>
+    <div class="avatar" title="Meu perfil"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/d070d501-6881-4237-8aa4-c88a46338d39.jpg" alt="Perfil"></div>
+    <button class="icon-btn"><i class="fas fa-bell"></i></button>
+    <button class="icon-btn gear-btn" id="gearBtn" title="ETERNAL KEY SYSTEM"><i class="fas fa-gear"></i></button>
+  </div>
+  <nav class="tabs">
+    <a href="#" class="tab">Destaques</a><a href="#" class="tab">Mercado</a><a href="#" class="tab">Criar</a><a href="#" class="tab active">Robux</a>
+  </nav>
+</header>
+
+<div class="robux-popover" id="robuxPopover">
+  <div class="popover-label">Meus Robux</div>
+  <div class="popover-balance">
+    <img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt="">
+    <div class="value"><span id="popoverBalance">1.234</span><small>Saldo disponível</small></div>
+  </div>
+  <button class="popover-btn ripple" onclick="document.getElementById('pacotes').scrollIntoView({behavior:'smooth'});closePopover();">Comprar Robux</button>
+</div>
+
+<main class="main">
+  <div class="actions">
+    <button class="robux-pill" id="robuxPill" title="Meus Robux">
+      <img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt="">
+      <span id="robuxBalance">1.234</span>
+    </button>
+    <button class="btn-send ripple" id="btnEnviar"><i class="fas fa-arrow-up-from-bracket"></i> Enviar</button>
+  </div>
+
+  <h1 class="page-title">Aproveite até 25% a mais de Robux</h1>
+  <h2 class="section-title" id="pacotes">Pacotes de Robux</h2>
+
+  <div class="packages">
+    <div class="pkg-row"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 24.000<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 22.500</span></div><button class="pkg-price no-action">R$ 1.179,90</button></div>
+    <div class="pkg-row"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 11.000<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 10.000</span></div><button class="pkg-price no-action">R$ 589,90</button></div>
+    <div class="pkg-row"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 5.250<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 4.500</span></div><button class="pkg-price no-action">R$ 294,90</button></div>
+    <div class="pkg-row"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 3.625<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 3.150</span></div><button class="pkg-price no-action">R$ 199,90</button></div>
+    <div class="pkg-row featured"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 2.000<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 1.700</span><span class="badge-foryou">Para você</span></div><button class="pkg-price ripple no-action">R$ 117,90</button></div>
+    <div class="pkg-row"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 1.500<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 1.200</span></div><button class="pkg-price no-action">R$ 79,90</button></div>
+    <div class="pkg-row"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 1.000<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 800</span></div><button class="pkg-price no-action">R$ 59,00</button></div>
+    <div class="pkg-row"><div class="pkg-amount"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 500<span class="old"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""> 400</span></div><button class="pkg-price no-action">R$ 29,90</button></div>
+  </div>
+
+  <div class="section-head">
+    <h2 class="section-title with-icon"><img class="plus-icon" src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/5a8fe6ff-fcb3-4d4b-977f-538f67ad67ef.png" alt="Plus">Novidade na Roblox</h2>
+    <a href="#" class="link-saiba">Saiba mais</a>
+  </div>
+
+  <div class="plans-wrap">
+    <div class="plans" id="plans">
+      <div class="plan"><div class="plan-title">Roblox Plus</div><div class="plan-price-row"><span class="current">R$ 29,90</span></div><ul class="plan-features"><li><i class="far fa-pen-to-square"></i>Até 20% de desconto em itens</li><li><i class="far fa-lock"></i>Servidores privados gratuitos</li><li><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt="">Envie Robux de graça</li><li><i class="far fa-palette"></i>Personalizar perfil</li></ul><button class="plan-btn ripple no-action">R$ 29,90/mês</button></div>
+      <div class="plan"><div class="plan-title">Plus 500</div><div class="plan-price-row"><span class="old">R$ 59,80</span><span class="current">R$ 53,45</span></div><ul class="plan-features"><li><i class="far fa-circle-check"></i>Tudo no Plus</li><li><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt="">+500 Robux todo mês</li><li><i class="fas fa-tag"></i>Total de R$ 59,80</li></ul><button class="plan-btn ripple no-action">R$ 53,45/mês</button></div>
+      <div class="plan"><div class="plan-title">Plus 1000</div><div class="plan-price-row"><span class="old">R$ 88,90</span><span class="current">R$ 76,90</span></div><ul class="plan-features"><li><i class="far fa-circle-check"></i>Tudo no Plus</li><li><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt="">+1.000 Robux todo mês</li><li><i class="fas fa-tag"></i>Total de R$ 88,90</li></ul><button class="plan-btn ripple no-action">R$ 76,90/mês</button></div>
+    </div>
+    <button class="carousel-arrow" id="arrowNext"><i class="fas fa-chevron-right"></i></button>
+  </div>
+
+  <h2 class="section-title">Perguntas frequentes</h2>
+  <div class="faq">
+    <div class="faq-item"><button class="faq-q">O que são Robux? <i class="fas fa-chevron-down"></i></button><div class="faq-a">Robux é a moeda virtual da Roblox. Você pode usá-la para comprar itens de avatar, acessórios, passes de jogos, assinaturas e muito mais dentro da plataforma.</div></div>
+    <div class="faq-item"><button class="faq-q">Onde encontro meus Robux? <i class="fas fa-chevron-down"></i></button><div class="faq-a">Após a compra, seus Robux são adicionados automaticamente ao seu saldo.</div></div>
+    <div class="faq-item"><button class="faq-q">O Robux expira? <i class="fas fa-chevron-down"></i></button><div class="faq-a">Não. Os Robux comprados ou recebidos não expiram.</div></div>
+    <div class="faq-item"><button class="faq-q">Como resgatar seu cartão presente? <i class="fas fa-chevron-down"></i></button><div class="faq-a">Acesse a página de resgate, insira o código e clique em "Resgatar".</div></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-cols">
+      <a href="#">Sobre nós</a><a href="#">Vagas</a><a href="#">Newsroom</a><a href="#">Responsáveis</a><a href="#">Compre cartões presente</a><a href="#">Ajuda</a><a href="#">Termos</a><a href="#">Acessibilidade</a><a href="#">Privacidade</a><a href="#">Suas opções de privacidade</a><a href="#">Mapa do site</a>
+    </div>
+    <div class="footer-bottom">
+      <div class="lang-select"><select><option selected>Português (Brasil)</option><option>English (US)</option><option>Español</option></select></div>
+      <div class="copyright">©2026 Roblox Corporation. Roblox, o logotipo Roblox e Powering Imagination estão entre nossas marcas registradas e não registradas nos EUA e outros países.</div>
+    </div>
+  </div>
+</footer>
+</div>
+
+<div class="modal-overlay" id="sendModal">
+  <div class="modal" role="dialog">
+    <div id="sendForm">
+      <div class="modal-header"><h2 class="modal-title">Enviar Robux</h2><button class="modal-close" id="modalClose"><i class="fas fa-xmark"></i></button></div>
+      <div class="modal-body">
+        <div class="field"><label class="field-label" for="inputUsername">Para quem você quer enviar?</label><div class="field-input" id="wrapUsername"><span class="prefix">@</span><input type="text" id="inputUsername" placeholder="Username" autocomplete="off"></div><div class="field-error" id="errUsername">Digite um username válido.</div></div>
+        <div class="field"><label class="field-label" for="inputAmount">Quantidade de Robux</label><div class="field-input" id="wrapAmount"><span class="prefix"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt=""></span><input type="text" id="inputAmount" placeholder="0" inputmode="numeric" autocomplete="off"></div><div class="field-error" id="errAmount">Quantidade inválida.</div><div class="quick-amounts"><button type="button" class="quick-btn" data-amount="100">100</button><button type="button" class="quick-btn" data-amount="500">500</button><button type="button" class="quick-btn" data-amount="1000">1.000</button><button type="button" class="quick-btn" data-amount="2000">2.000</button></div></div>
+        <div class="balance-box"><div class="label"><img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt="">Saldo disponível</div><div class="value"><span id="modalBalance">1.234</span> Robux</div></div>
+      </div>
+      <div class="modal-footer"><button class="btn btn-cancel ripple" id="btnCancel">Cancelar</button><button class="btn btn-confirm ripple" id="btnConfirm" disabled>Enviar</button></div>
+    </div>
+    <div class="success-view" id="successView"><div class="success-icon"><i class="fas fa-check"></i></div><div class="success-title">Robux enviados com sucesso</div><div class="success-msg" id="successMsg"></div><button class="btn btn-confirm ripple" style="width:100%;height:44px;border-radius:8px;font-weight:700;" id="btnDone">Concluir</button></div>
+  </div>
+</div>
+
+<div class="key-overlay" id="keyOverlay">
+  <div class="key-dashboard" role="dialog">
+    <div class="key-header">
+      <div class="key-header-left">
+        <div class="key-logo"><i class="fas fa-key"></i></div>
+        <div>
+          <div class="key-title">Eternal Key System</div>
+          <div class="key-subtitle"><span class="dot"></span> Sessão ativa</div>
+        </div>
+      </div>
+      <div class="key-header-right">
+        <span class="key-tier-badge" id="tierBadge"><i class="fas fa-crown"></i> Free</span>
+        <button class="key-close" id="keyClose"><i class="fas fa-xmark"></i></button>
+      </div>
+    </div>
+    <div class="key-body">
+      <div>
+        <div class="section-label">Chave de acesso</div>
+        <div class="key-card">
+          <div class="key-row">
+            <div class="key-row-title"><i class="fas fa-shield-halved"></i> Sua licença</div>
+            <span class="key-status-pill"><span class="status-dot"></span> Ativa</span>
+          </div>
+          <div class="key-code-box">
+            <span class="key-code-text" id="keyValue">ETNX-XXXX-XXXX-XXXX</span>
+            <button class="key-copy-btn" id="keyCopy" title="Copiar"><i class="fas fa-copy"></i></button>
+          </div>
+        </div>
+      </div>
+      <div>
+        <div class="section-label">Informações</div>
+        <div class="info-grid">
+          <div class="info-cell"><div class="info-label"><i class="fas fa-crown"></i> Plano</div><div class="info-value" id="statTier">Free</div><div class="info-foot" id="statTierSub">Multi-usuário</div></div>
+          <div class="info-cell"><div class="info-label"><i class="fas fa-clock"></i> Restante</div><div class="info-value" id="statRemaining">∞</div><div class="info-foot" id="statRemainingSub">Nunca expira</div></div>
+          <div class="info-cell"><div class="info-label"><i class="fas fa-calendar"></i> Emitida</div><div class="info-value mono" id="statIssued">--/--/----</div><div class="info-foot">Data de emissão</div></div>
+        </div>
+      </div>
+      <div class="progress-box" id="progressUsageBlock" style="display:none">
+        <div class="progress-header"><div class="progress-title"><i class="fas fa-bolt"></i> Tempo de uso</div><div class="progress-value" id="pctUsed">0%</div></div>
+        <div class="progress-track"><div class="progress-fill" id="barUsed" style="width:0%"></div></div>
+        <div class="progress-footer"><span id="startDate">--/--/----</span><span id="endDate">--/--/----</span></div>
+      </div>
+      <div class="progress-box" id="progressLimitBlock" style="display:none">
+        <div class="progress-header"><div class="progress-title"><i class="fas fa-gauge"></i> Tempo limite</div><div class="progress-value" id="pctLimit">100%</div></div>
+        <div class="progress-track"><div class="progress-fill soft" id="barLimit" style="width:100%"></div></div>
+        <div class="progress-footer"><span id="limitUsed">Consumido: 0d 00h</span><span id="limitLeft">Restante: --</span></div>
+      </div>
+      <div class="actions-grid">
+        <button class="action-btn action-btn-primary ripple" id="btnCopyKey"><i class="fas fa-copy"></i> Copiar chave</button>
+        <button class="action-btn action-btn-ghost ripple" id="btnLogout"><i class="fas fa-right-from-bracket"></i> Sair</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="cfg-overlay" id="cfgOverlay">
+  <div class="cfg-card" role="dialog">
+    <div class="cfg-header">
+      <div class="cfg-header-left">
+        <div class="cfg-logo"><i class="fas fa-terminal"></i></div>
+        <div>
+          <div class="cfg-title">Config Panel</div>
+          <div class="cfg-subtitle"><span class="dot"></span> Modo administrador</div>
+        </div>
+      </div>
+      <button class="cfg-close" id="cfgClose"><i class="fas fa-xmark"></i></button>
+    </div>
+    <div class="cfg-body">
+      <div class="cfg-balance">
+        <div class="cfg-balance-label"><i class="fas fa-wallet"></i> Saldo atual</div>
+        <div class="cfg-balance-value">
+          <img src="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/c03219f8-52be-4939-a6c7-71da9d75f373.png" alt="">
+          <div class="num"><span id="cfgCurrentBalance">1.234</span><small>Robux disponíveis</small></div>
+        </div>
+      </div>
+      <div class="cfg-section">
+        <div class="cfg-section-title"><i class="fas fa-plus-circle"></i> Adicionar Robux <span class="tag">Admin</span></div>
+        <div class="cfg-field"><span class="icon"><i class="fas fa-coins"></i></span><input type="text" id="cfgAmount" placeholder="0" inputmode="numeric"><span class="suffix">Robux</span></div>
+        <div class="cfg-quick">
+          <button class="cfg-quick-btn ripple" data-cfg="100">+100</button><button class="cfg-quick-btn ripple" data-cfg="500">+500</button><button class="cfg-quick-btn ripple" data-cfg="1000">+1K</button><button class="cfg-quick-btn ripple" data-cfg="5000">+5K</button><button class="cfg-quick-btn ripple" data-cfg="10000">+10K</button><button class="cfg-quick-btn ripple" data-cfg="50000">+50K</button><button class="cfg-quick-btn ripple" data-cfg="100000">+100K</button><button class="cfg-quick-btn ripple" data-cfg="1000000">+1M</button>
+        </div>
+        <button class="cfg-add ripple" id="cfgAddBtn" disabled><i class="fas fa-plus"></i> Adicionar à conta</button>
+      </div>
+      <div class="cfg-div"></div>
+      <div class="cfg-section">
+        <div class="cfg-section-title"><i class="fas fa-triangle-exclamation"></i> Zona de perigo</div>
+        <div class="cfg-danger">
+          <div class="cfg-danger-info">
+            <div class="cfg-danger-icon"><i class="fas fa-trash-can"></i></div>
+            <div>
+              <div class="cfg-danger-title">Zerar saldo</div>
+              <div class="cfg-danger-desc">Define o saldo para 0 Robux</div>
+            </div>
+          </div>
+          <button class="cfg-danger-btn ripple" id="cfgResetBtn"><i class="fas fa-rotate-left"></i> Zerar</button>
+        </div>
+      </div>
+      <div class="cfg-info"><i class="fas fa-circle-info"></i><span>Comando <code>/EtnxPanel</code> ativo.</span></div>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"><i class="fas fa-circle-check"></i><span id="toastText"></span></div>
+
+<script>
+/* __SESSION_DATA__ */
+
+const session = window.__SESSION__;
+if (!session || !session.key){
+  window.location.replace('/');
+  throw new Error('sem sessão');
+}
+
+/* ============================================================
+   HWID — precisa ser IGUAL ao do gate
+   ============================================================ */
+async function computeHWID(){
+  const parts = [];
+  try {
+    const c = document.createElement('canvas');
+    c.width = 220; c.height = 60;
+    const ctx = c.getContext('2d');
+    ctx.textBaseline = 'top';
+    ctx.font = '16px "Arial"';
+    ctx.fillStyle = '#f60'; ctx.fillRect(125, 1, 62, 20);
+    ctx.fillStyle = '#069'; ctx.fillText('EternalKey', 2, 15);
+    ctx.fillStyle = 'rgba(102,204,0,0.7)'; ctx.fillText('EternalKey', 4, 17);
+    parts.push('c:' + c.toDataURL());
+  } catch { parts.push('c:none'); }
+  try {
+    const gl = document.createElement('canvas').getContext('webgl');
+    if (gl){
+      const ext = gl.getExtension('WEBGL_debug_renderer_info');
+      if (ext){
+        parts.push('v:' + gl.getParameter(ext.UNMASKED_VENDOR_WEBGL));
+        parts.push('r:' + gl.getParameter(ext.UNMASKED_RENDERER_WEBGL));
+      }
+      parts.push('p:' + gl.getParameter(gl.VERSION));
+    }
+  } catch { parts.push('v:none'); }
+  parts.push('hc:' + (navigator.hardwareConcurrency || 0));
+  parts.push('pf:' + (navigator.platform || ''));
+  parts.push('sc:' + screen.width + 'x' + screen.height + 'x' + screen.colorDepth);
+  parts.push('tz:' + (Intl.DateTimeFormat().resolvedOptions().timeZone || ''));
+  parts.push('lg:' + (navigator.language || ''));
+  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(parts.join('|')));
+  const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
+  return (hex.slice(0, 32).match(/.{4}/g) || []).join('-');
+}
+
+/* ============================================================
+   UTILS
+   ============================================================ */
+const fmt = n => n.toLocaleString('pt-BR');
+const fmtD = d => {
+  const dt = d instanceof Date ? d : new Date(d);
+  return String(dt.getDate()).padStart(2,'0') + '/' + String(dt.getMonth()+1).padStart(2,'0') + '/' + dt.getFullYear();
+};
+const fmtDT = ts => {
+  const d = ts instanceof Date ? ts : new Date(ts);
+  return fmtD(d) + ' ' + String(d.getHours()).padStart(2,'0') + ':' + String(d.getMinutes()).padStart(2,'0');
+};
+const toast = document.getElementById('toast');
+const toastText = document.getElementById('toastText');
+let toastTimer;
+function showToast(msg){
+  toastText.textContent = msg;
+  toast.classList.add('show');
+  clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+}
+document.addEventListener('click', e => {
+  const btn = e.target.closest('.ripple');
+  if (!btn) return;
+  const rect = btn.getBoundingClientRect();
+  const size = Math.max(rect.width, rect.height);
+  const r = document.createElement('span');
+  r.className = 'ripple-el';
+  r.style.width = r.style.height = size + 'px';
+  r.style.left = (e.clientX - rect.left - size/2) + 'px';
+  r.style.top = (e.clientY - rect.top - size/2) + 'px';
+  btn.appendChild(r);
+  setTimeout(() => r.remove(), 620);
+});
+
+/* ============================================================
+   ESTADO
+   ============================================================ */
+const currentKey = session.key;
+const currentKeyObj = session;
+let saldo = 1234;
+let remainingMinutes = 0;
+let totalMinutes = 0;
+let keyTimerInterval = null;
+
+/* ============================================================
+   BOOT — checa HWID antes de destravar
+   ============================================================ */
+(async function boot(){
+  try {
+    const hwid = await computeHWID();
+    const res = await fetch('/api/check-hwid', {
+      method: 'POST',
+      headers: { 'X-HWID': hwid },
+      credentials: 'same-origin'
+    });
+    if (!res.ok){ window.location.href = '/logout'; return; }
+    document.body.classList.remove('locked');
+    document.getElementById('site').classList.add('unlocked');
+    preencherDashboard(session);
+    atualizarSaldo();
+  } catch (err){
+    window.location.href = '/logout';
+  }
+})();
+
+/* ============================================================
+   DASHBOARD
+   ============================================================ */
+function preencherDashboard(k){
+  document.getElementById('keyValue').textContent = k.key;
+  document.getElementById('statIssued').textContent = fmtD(k.createdAt);
+  const isPremium = k.type === 'premium';
+  const isPermanent = k.expiresAt === null;
+  const badge = document.getElementById('tierBadge');
+  if (isPremium){ badge.innerHTML = '<i class="fas fa-crown"></i> Premium'; badge.classList.add('gold'); }
+  else { badge.innerHTML = '<i class="fas fa-crown"></i> Free'; badge.classList.remove('gold'); }
+  document.getElementById('statTier').textContent = isPremium ? 'Premium' : 'Free';
+  document.getElementById('statTierSub').textContent = isPremium ? (isPermanent ? 'Acesso permanente' : 'Acesso premium') : 'Multi-usuário';
+  const startTs = k.redeemedAt || k.createdAt;
+  const endTs = k.expiresAt;
+  if (isPermanent){
+    document.getElementById('progressUsageBlock').style.display = 'none';
+    document.getElementById('progressLimitBlock').style.display = 'none';
+    document.getElementById('statRemaining').innerHTML = '∞ <small>permanente</small>';
+    document.getElementById('statRemainingSub').textContent = 'Nunca expira';
+    totalMinutes = 0; remainingMinutes = 0;
+  } else {
+    document.getElementById('progressUsageBlock').style.display = '';
+    document.getElementById('progressLimitBlock').style.display = '';
+    totalMinutes = Math.floor((endTs - startTs) / 60000);
+    remainingMinutes = Math.max(0, Math.floor((endTs - Date.now()) / 60000));
+    document.getElementById('startDate').textContent = 'Início: ' + fmtDT(startTs);
+    document.getElementById('endDate').textContent = 'Até: ' + fmtDT(endTs);
+    document.getElementById('statRemainingSub').textContent = 'Ciclo de uso';
+    updateRemainingDisplay();
+    clearInterval(keyTimerInterval);
+    keyTimerInterval = setInterval(tickKeyTimer, 60000);
+  }
+}
+function updateRemainingDisplay(){
+  if (!session.expiresAt) return;
+  const d = Math.floor(remainingMinutes / 1440);
+  const h = Math.floor((remainingMinutes % 1440) / 60);
+  const m = remainingMinutes % 60;
+  const el = document.getElementById('statRemaining');
+  if (el) el.innerHTML = `${d}d <small>${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m</small>`;
+  const used = totalMinutes - remainingMinutes;
+  const usedD = Math.floor(used / 1440);
+  const usedH = Math.floor((used % 1440) / 60);
+  const usedM = used % 60;
+  const usedEl = document.getElementById('limitUsed');
+  const leftEl = document.getElementById('limitLeft');
+  if (usedEl) usedEl.textContent = `Consumido: ${usedD}d ${String(usedH).padStart(2,'0')}h ${String(usedM).padStart(2,'0')}m`;
+  if (leftEl) leftEl.textContent = `Restante: ${d}d ${String(h).padStart(2,'0')}h ${String(m).padStart(2,'0')}m`;
+}
+function tickKeyTimer(){
+  if (remainingMinutes <= 0){ clearInterval(keyTimerInterval); showToast('Sua key expirou.'); return; }
+  remainingMinutes--;
+  const usedPct = Math.min(100, ((totalMinutes - remainingMinutes) / totalMinutes) * 100);
+  const leftPct = 100 - usedPct;
+  document.getElementById('pctUsed').textContent = Math.round(usedPct) + '%';
+  document.getElementById('barUsed').style.width = usedPct + '%';
+  document.getElementById('pctLimit').textContent = Math.round(leftPct) + '%';
+  document.getElementById('barLimit').style.width = leftPct + '%';
+  updateRemainingDisplay();
+}
+
+/* ============================================================
+   PAINEL DA KEY
+   ============================================================ */
+const keyOverlay = document.getElementById('keyOverlay');
+const gearBtn = document.getElementById('gearBtn');
+const keyClose = document.getElementById('keyClose');
+function abrirKey(){ keyOverlay.classList.add('open'); document.body.style.overflow = 'hidden'; }
+function fecharKey(){ keyOverlay.classList.remove('open'); document.body.style.overflow = ''; }
+gearBtn.addEventListener('click', abrirKey);
+keyClose.addEventListener('click', fecharKey);
+keyOverlay.addEventListener('click', e => { if (e.target === keyOverlay) fecharKey(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && keyOverlay.classList.contains('open')) fecharKey(); });
+document.getElementById('keyCopy').addEventListener('click', () => {
+  navigator.clipboard.writeText(currentKey).then(() => showToast('Chave copiada')).catch(() => showToast('Não foi possível copiar'));
+});
+document.getElementById('btnCopyKey').addEventListener('click', () => {
+  navigator.clipboard.writeText(currentKey).then(() => showToast('Chave copiada: ' + currentKey)).catch(() => showToast('Não foi possível copiar'));
+});
+document.getElementById('btnLogout').addEventListener('click', () => {
+  if (!confirm('Deseja sair da conta?\n\nVocê precisará inserir a chave novamente para acessar.')) return;
+  window.location.href = '/logout';
+});
+
+/* ============================================================
+   SALDO
+   ============================================================ */
+const balEl = document.getElementById('robuxBalance');
+const popBalEl = document.getElementById('popoverBalance');
+const modalBalEl = document.getElementById('modalBalance');
+const cfgBalEl = document.getElementById('cfgCurrentBalance');
+function atualizarSaldo(pulse){
+  const txt = fmt(saldo);
+  balEl.textContent = txt; popBalEl.textContent = txt; modalBalEl.textContent = txt;
+  if (cfgBalEl) cfgBalEl.textContent = txt;
+  if (pulse){
+    [balEl, popBalEl, modalBalEl, cfgBalEl].forEach(el => {
+      if (!el) return;
+      el.classList.remove('balance-pulse');
+      void el.offsetWidth;
+      el.classList.add('balance-pulse');
+    });
+  }
+}
+const pill = document.getElementById('robuxPill');
+const popover = document.getElementById('robuxPopover');
+function closePopover(){ popover.classList.remove('open'); }
+pill.addEventListener('click', e => { e.stopPropagation(); popover.classList.toggle('open'); });
+document.addEventListener('click', e => { if (!popover.contains(e.target) && !pill.contains(e.target)) closePopover(); });
+
+/* ============================================================
+   MODAL ENVIAR
+   ============================================================ */
+const sendModal = document.getElementById('sendModal');
+const sendForm = document.getElementById('sendForm');
+const successView = document.getElementById('successView');
+const inputUser = document.getElementById('inputUsername');
+const inputAmt = document.getElementById('inputAmount');
+const wrapUser = document.getElementById('wrapUsername');
+const wrapAmt = document.getElementById('wrapAmount');
+const errUser = document.getElementById('errUsername');
+const errAmt = document.getElementById('errAmount');
+const btnConfirm = document.getElementById('btnConfirm');
+const successMsg = document.getElementById('successMsg');
+function abrirModal(){
+  sendForm.style.display = 'block';
+  successView.classList.remove('show');
+  inputUser.value = ''; inputAmt.value = '';
+  wrapUser.classList.remove('error'); wrapAmt.classList.remove('error');
+  errUser.classList.remove('show'); errAmt.classList.remove('show');
+  btnConfirm.disabled = true;
+  atualizarSaldo();
+  sendModal.classList.add('open');
+  setTimeout(() => inputUser.focus(), 220);
+}
+function fecharModal(){ sendModal.classList.remove('open'); }
+document.getElementById('btnEnviar').addEventListener('click', abrirModal);
+document.getElementById('modalClose').addEventListener('click', fecharModal);
+document.getElementById('btnCancel').addEventListener('click', fecharModal);
+sendModal.addEventListener('click', e => { if (e.target === sendModal) fecharModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && sendModal.classList.contains('open')) fecharModal(); });
+inputAmt.addEventListener('input', () => {
+  let v = inputAmt.value.replace(/\D/g, '').replace(/^0+/, '');
+  inputAmt.value = v ? Number(v).toLocaleString('pt-BR') : '';
+  wrapAmt.classList.remove('error'); errAmt.classList.remove('show');
+  validarEnvio();
+});
+inputUser.addEventListener('input', () => {
+  inputUser.value = inputUser.value.replace(/[^A-Za-z0-9_]/g, '');
+  wrapUser.classList.remove('error'); errUser.classList.remove('show');
+  validarEnvio();
+});
+document.querySelectorAll('.quick-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    inputAmt.value = Number(btn.dataset.amount).toLocaleString('pt-BR');
+    wrapAmt.classList.remove('error'); errAmt.classList.remove('show');
+    validarEnvio();
+  });
+});
+function getAmount(){ return Number(inputAmt.value.replace(/\D/g, '')) || 0; }
+function validarEnvio(){
+  const userOk = inputUser.value.trim().length >= 3;
+  const amt = getAmount();
+  btnConfirm.disabled = !(userOk && amt > 0 && amt <= saldo);
+}
+btnConfirm.addEventListener('click', () => {
+  const user = inputUser.value.trim();
+  const amt = getAmount();
+  let ok = true;
+  if (user.length < 3){ wrapUser.classList.add('error'); errUser.textContent = 'Digite um username válido.'; errUser.classList.add('show'); ok = false; }
+  if (amt <= 0){ wrapAmt.classList.add('error'); errAmt.textContent = 'Quantidade maior que 0.'; errAmt.classList.add('show'); ok = false; }
+  else if (amt > saldo){ wrapAmt.classList.add('error'); errAmt.textContent = `Saldo insuficiente. Saldo: ${fmt(saldo)}.`; errAmt.classList.add('show'); ok = false; }
+  if (!ok) return;
+  saldo -= amt; atualizarSaldo(true);
+  successMsg.innerHTML = `Você enviou <strong>${fmt(amt)}</strong> Robux para <strong>@${user}</strong>.`;
+  sendForm.style.display = 'none';
+  successView.classList.add('show');
+  showToast(`${fmt(amt)} Robux enviados para @${user}`);
+});
+document.getElementById('btnDone').addEventListener('click', fecharModal);
+
+/* ============================================================
+   FAQ
+   ============================================================ */
+document.querySelectorAll('.faq-item').forEach(item => {
+  item.querySelector('.faq-q').addEventListener('click', () => {
+    const abrir = !item.classList.contains('active');
+    document.querySelectorAll('.faq-item').forEach(o => o.classList.remove('active'));
+    if (abrir) item.classList.add('active');
+  });
+});
+const plans = document.getElementById('plans');
+document.getElementById('arrowNext').addEventListener('click', () => plans.scrollBy({left:220,behavior:'smooth'}));
+
+/* ============================================================
+   CONFIG PANEL
+   ============================================================ */
+const cfgOverlay = document.getElementById('cfgOverlay');
+const cfgClose = document.getElementById('cfgClose');
+const cfgAmount = document.getElementById('cfgAmount');
+const cfgAddBtn = document.getElementById('cfgAddBtn');
+const cfgResetBtn = document.getElementById('cfgResetBtn');
+const searchInput = document.getElementById('searchInput');
+const searchWrap = document.getElementById('searchWrap');
+function openConfig(){
+  cfgOverlay.classList.add('open');
+  document.body.style.overflow = 'hidden';
+  atualizarSaldo();
+  setTimeout(() => cfgAmount.focus(), 260);
+}
+function closeConfig(){
+  cfgOverlay.classList.remove('open');
+  document.body.style.overflow = '';
+  cfgAmount.value = '';
+  cfgAddBtn.disabled = true;
+}
+cfgClose.addEventListener('click', closeConfig);
+cfgOverlay.addEventListener('click', e => { if (e.target === cfgOverlay) closeConfig(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape' && cfgOverlay.classList.contains('open')) closeConfig(); });
+cfgAmount.addEventListener('input', () => {
+  let v = cfgAmount.value.replace(/\D/g, '').replace(/^0+/, '');
+  cfgAmount.value = v ? Number(v).toLocaleString('pt-BR') : '';
+  cfgAddBtn.disabled = !v || Number(v) <= 0;
+});
+cfgAmount.addEventListener('keydown', e => { if (e.key === 'Enter' && !cfgAddBtn.disabled) cfgAddBtn.click(); });
+document.querySelectorAll('.cfg-quick-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const val = Number(btn.dataset.cfg);
+    cfgAmount.value = val.toLocaleString('pt-BR');
+    cfgAddBtn.disabled = false;
+  });
+});
+cfgAddBtn.addEventListener('click', () => {
+  const amt = Number(cfgAmount.value.replace(/\D/g, '')) || 0;
+  if (amt <= 0){ showToast('Quantidade inválida'); return; }
+  saldo += amt; atualizarSaldo(true);
+  showToast(`+${fmt(amt)} Robux adicionados`);
+  cfgAmount.value = ''; cfgAddBtn.disabled = true;
+});
+cfgResetBtn.addEventListener('click', () => {
+  if (saldo === 0){ showToast('Saldo já zerado'); return; }
+  const anterior = saldo;
+  saldo = 0; atualizarSaldo(true);
+  showToast(`Saldo zerado (removidos ${fmt(anterior)})`);
+});
+searchInput.addEventListener('input', () => {
+  const v = searchInput.value.trim();
+  searchWrap.classList.toggle('cmd-mode', v.startsWith('/'));
+});
+searchInput.addEventListener('keydown', e => {
+  if (e.key === 'Enter'){
+    e.preventDefault();
+    const v = searchInput.value.trim();
+    if (v === '/EtnxPanel'){ searchInput.value = ''; searchWrap.classList.remove('cmd-mode'); openConfig(); }
+    else if (v.length > 0){ showToast(`Nenhum resultado para "${v}"`); }
+  }
+  if (e.key === 'Escape'){ searchInput.value = ''; searchWrap.classList.remove('cmd-mode'); searchInput.blur(); }
+});
+
+/* ============================================================
+   Monitor de expiração
+   ============================================================ */
+setInterval(() => {
+  if (!session.expiresAt) return;
+  if (Date.now() >= session.expiresAt){
+    showToast('Sua key expirou. Acesso encerrado.');
+    setTimeout(() => window.location.href = '/logout', 2000);
+  }
+}, 15000);
+</script>
+</body>
+</html>
