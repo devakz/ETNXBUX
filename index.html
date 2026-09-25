@@ -4,6 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Acesso Restrito</title>
+<link rel="icon" href="https://i.supaimg.com/755ee084-1fb0-4f60-9563-6c7e28e59a26/d5cd3421-23b6-4dbe-9f4d-63ba1d01b818.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -43,21 +44,34 @@ body::before{content:'';position:fixed;top:-300px;left:50%;transform:translateX(
   <div class="logo"><i class="fas fa-key"></i></div>
   <div class="title">Eternal Key System</div>
   <div class="sub">Insira sua chave de acesso para desbloquear a plataforma</div>
+
   <label class="label" for="gateInput">Chave de acesso</label>
   <input type="text" class="input" id="gateInput" placeholder="ETNX-XXXX-XXXX-XXXX" maxlength="19" autocomplete="off" spellcheck="false">
-  <div class="error" id="gateError"><i class="fas fa-circle-exclamation"></i><span id="gateErrorText">Chave inválida</span></div>
-  <button class="btn" id="btnValidate"><i class="fas fa-arrow-right-to-bracket"></i> Desbloquear acesso</button>
+
+  <div class="error" id="gateError">
+    <i class="fas fa-circle-exclamation"></i>
+    <span id="gateErrorText">Chave inválida</span>
+  </div>
+
+  <button class="btn" id="btnValidate">
+    <i class="fas fa-arrow-right-to-bracket"></i> Desbloquear acesso
+  </button>
+
   <div class="footer"><i class="fas fa-lock"></i> Conexão segura</div>
 </div>
 
 <script>
 const WORKER_URL = 'https://eternal-keys.sadz.workers.dev';
+const TOKEN_KEY  = 'etnx_token';
 
 const gateInput     = document.getElementById('gateInput');
 const gateError     = document.getElementById('gateError');
 const gateErrorText = document.getElementById('gateErrorText');
 const btnValidate   = document.getElementById('btnValidate');
 
+/* ============================================================
+   HWID — fingerprint estável (canvas + WebGL + hardware)
+   ============================================================ */
 async function computeHWID(){
   const parts = [];
   try {
@@ -128,7 +142,6 @@ btnValidate.addEventListener('click', async () => {
     const res  = await fetch(WORKER_URL + '/validate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-HWID': hwid },
-      credentials: 'include',
       body: JSON.stringify({ key: raw })
     });
     const data = await res.json();
@@ -139,7 +152,10 @@ btnValidate.addEventListener('click', async () => {
       return;
     }
     gateInput.classList.add('valid');
-    setTimeout(() => { window.location.href = WORKER_URL + '/app'; }, 300);
+    sessionStorage.setItem(TOKEN_KEY, data.token);
+    setTimeout(() => {
+      window.location.href = WORKER_URL + '/app?t=' + encodeURIComponent(data.token);
+    }, 300);
   } catch (err){
     btnValidate.disabled = false;
     btnValidate.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Desbloquear acesso';
@@ -147,6 +163,7 @@ btnValidate.addEventListener('click', async () => {
   }
 });
 
+/* Foco automático no input quando a página carrega */
 window.addEventListener('load', () => setTimeout(() => gateInput.focus(), 300));
 </script>
 </body>
