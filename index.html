@@ -44,79 +44,65 @@ body::before{content:'';position:fixed;top:-300px;left:50%;transform:translateX(
   <div class="logo"><i class="fas fa-key"></i></div>
   <div class="title">Eternal Key System</div>
   <div class="sub">Insira sua chave de acesso para desbloquear a plataforma</div>
-
   <label class="label" for="gateInput">Chave de acesso</label>
   <input type="text" class="input" id="gateInput" placeholder="ETNX-XXXX-XXXX-XXXX" maxlength="19" autocomplete="off" spellcheck="false">
-
-  <div class="error" id="gateError">
-    <i class="fas fa-circle-exclamation"></i>
-    <span id="gateErrorText">Chave inválida</span>
-  </div>
-
-  <button class="btn" id="btnValidate">
-    <i class="fas fa-arrow-right-to-bracket"></i> Desbloquear acesso
-  </button>
-
+  <div class="error" id="gateError"><i class="fas fa-circle-exclamation"></i><span id="gateErrorText">Chave inválida</span></div>
+  <button class="btn" id="btnValidate"><i class="fas fa-arrow-right-to-bracket"></i> Desbloquear acesso</button>
   <div class="footer"><i class="fas fa-lock"></i> Conexão segura</div>
 </div>
 
 <script>
-const WORKER_URL = 'https://eternal-keys.sadz.workers.dev';
-const TOKEN_KEY  = 'etnx_token';
+var WORKER_URL = 'https://eternal-keys.sadz.workers.dev';
+var TOKEN_KEY  = 'etnx_token';
 
-const gateInput     = document.getElementById('gateInput');
-const gateError     = document.getElementById('gateError');
-const gateErrorText = document.getElementById('gateErrorText');
-const btnValidate   = document.getElementById('btnValidate');
+var gateInput     = document.getElementById('gateInput');
+var gateError     = document.getElementById('gateError');
+var gateErrorText = document.getElementById('gateErrorText');
+var btnValidate   = document.getElementById('btnValidate');
 
-/* ============================================================
-   HWID — fingerprint estável (canvas + WebGL + hardware)
-   ============================================================ */
 async function computeHWID(){
-  const parts = [];
+  var parts = [];
   try {
-    const c = document.createElement('canvas');
-    c.width = 220; c.height = 60;
-    const ctx = c.getContext('2d');
-    ctx.textBaseline = 'top';
-    ctx.font = '16px "Arial"';
+    var c = document.createElement('canvas'); c.width = 220; c.height = 60;
+    var ctx = c.getContext('2d');
+    ctx.textBaseline = 'top'; ctx.font = '16px Arial';
     ctx.fillStyle = '#f60'; ctx.fillRect(125, 1, 62, 20);
     ctx.fillStyle = '#069'; ctx.fillText('EternalKey', 2, 15);
     ctx.fillStyle = 'rgba(102,204,0,0.7)'; ctx.fillText('EternalKey', 4, 17);
     parts.push('c:' + c.toDataURL());
-  } catch { parts.push('c:none'); }
+  } catch(e){ parts.push('c:none'); }
   try {
-    const gl = document.createElement('canvas').getContext('webgl');
+    var gl = document.createElement('canvas').getContext('webgl');
     if (gl){
-      const ext = gl.getExtension('WEBGL_debug_renderer_info');
+      var ext = gl.getExtension('WEBGL_debug_renderer_info');
       if (ext){
         parts.push('v:' + gl.getParameter(ext.UNMASKED_VENDOR_WEBGL));
         parts.push('r:' + gl.getParameter(ext.UNMASKED_RENDERER_WEBGL));
       }
       parts.push('p:' + gl.getParameter(gl.VERSION));
     }
-  } catch { parts.push('v:none'); }
+  } catch(e){ parts.push('v:none'); }
   parts.push('hc:' + (navigator.hardwareConcurrency || 0));
   parts.push('pf:' + (navigator.platform || ''));
   parts.push('sc:' + screen.width + 'x' + screen.height + 'x' + screen.colorDepth);
   parts.push('tz:' + (Intl.DateTimeFormat().resolvedOptions().timeZone || ''));
   parts.push('lg:' + (navigator.language || ''));
-  const buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(parts.join('|')));
-  const hex = [...new Uint8Array(buf)].map(b => b.toString(16).padStart(2,'0')).join('').toUpperCase();
-  return (hex.slice(0, 32).match(/.{4}/g) || []).join('-');
+  var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(parts.join('|')));
+  var hex = [].slice.call(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('').toUpperCase();
+  return (hex.slice(0,32).match(/.{4}/g) || []).join('-');
 }
 
-gateInput.addEventListener('input', e => {
-  let v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
-  if (v.startsWith('ETNX')) v = v.slice(4);
+gateInput.addEventListener('input', function(e){
+  var v = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '');
+  if (v.indexOf('ETNX') === 0) v = v.slice(4);
   v = v.slice(0, 12);
-  const groups = v.match(/.{1,4}/g);
-  const suffix = groups ? groups.join('-') : '';
+  var groups = v.match(/.{1,4}/g);
+  var suffix = groups ? groups.join('-') : '';
   e.target.value = 'ETNX' + (suffix ? '-' + suffix : '');
   gateInput.classList.remove('error');
   gateError.classList.remove('show');
 });
-gateInput.addEventListener('keydown', e => {
+gateInput.addEventListener('keydown', function(e){
   if (e.key === 'Enter'){ e.preventDefault(); btnValidate.click(); }
 });
 
@@ -124,11 +110,11 @@ function showError(msg){
   gateErrorText.textContent = msg;
   gateError.classList.add('show');
   gateInput.classList.add('error','shake');
-  setTimeout(() => gateInput.classList.remove('shake'), 420);
+  setTimeout(function(){ gateInput.classList.remove('shake'); }, 420);
 }
 
-btnValidate.addEventListener('click', async () => {
-  const raw = gateInput.value.trim().toUpperCase();
+btnValidate.addEventListener('click', async function(){
+  var raw = gateInput.value.trim().toUpperCase();
   if (raw.length !== 19){ showError('Preencha a chave completa'); return; }
   if (!/^ETNX-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(raw)){ showError('Formato inválido.'); return; }
 
@@ -138,13 +124,13 @@ btnValidate.addEventListener('click', async () => {
   gateInput.classList.remove('error');
 
   try {
-    const hwid = await computeHWID();
-    const res  = await fetch(WORKER_URL + '/validate', {
+    var hwid = await computeHWID();
+    var res  = await fetch(WORKER_URL + '/validate', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'X-HWID': hwid },
       body: JSON.stringify({ key: raw })
     });
-    const data = await res.json();
+    var data = await res.json();
     if (!data.valid){
       btnValidate.disabled = false;
       btnValidate.innerHTML = '<i class="fas fa-arrow-right-to-bracket"></i> Desbloquear acesso';
@@ -152,8 +138,8 @@ btnValidate.addEventListener('click', async () => {
       return;
     }
     gateInput.classList.add('valid');
-    sessionStorage.setItem(TOKEN_KEY, data.token);
-    setTimeout(() => {
+    localStorage.setItem(TOKEN_KEY, data.token);
+    setTimeout(function(){
       window.location.href = WORKER_URL + '/app?t=' + encodeURIComponent(data.token);
     }, 300);
   } catch (err){
@@ -163,8 +149,22 @@ btnValidate.addEventListener('click', async () => {
   }
 });
 
-/* Foco automático no input quando a página carrega */
-window.addEventListener('load', () => setTimeout(() => gateInput.focus(), 300));
+/* AUTO-LOGIN: se já tem token salvo e válido, vai direto pro app */
+(async function autoLogin(){
+  var saved = localStorage.getItem(TOKEN_KEY);
+  if (!saved) return;
+  try {
+    var res  = await fetch(WORKER_URL + '/api/session?t=' + encodeURIComponent(saved));
+    var data = await res.json();
+    if (data.valid){
+      window.location.href = WORKER_URL + '/app?t=' + encodeURIComponent(saved);
+    } else {
+      localStorage.removeItem(TOKEN_KEY);
+    }
+  } catch(e){}
+})();
+
+window.addEventListener('load', function(){ setTimeout(function(){ gateInput.focus(); }, 300); });
 </script>
 </body>
 </html>
