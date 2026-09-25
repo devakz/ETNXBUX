@@ -39,7 +39,6 @@ body::before{content:'';position:fixed;top:-300px;left:50%;transform:translateX(
 </style>
 </head>
 <body>
-
 <div class="card">
   <div class="logo"><i class="fas fa-key"></i></div>
   <div class="title">Eternal Key System</div>
@@ -50,7 +49,6 @@ body::before{content:'';position:fixed;top:-300px;left:50%;transform:translateX(
   <button class="btn" id="btnValidate"><i class="fas fa-arrow-right-to-bracket"></i> Desbloquear acesso</button>
   <div class="footer"><i class="fas fa-lock"></i> Conexão segura</div>
 </div>
-
 <script>
 var WORKER_URL = 'https://eternal-keys.sadz.workers.dev';
 var TOKEN_KEY  = 'etnx_token';
@@ -62,34 +60,16 @@ var btnValidate   = document.getElementById('btnValidate');
 
 async function computeHWID(){
   var parts = [];
-  try {
-    var c = document.createElement('canvas'); c.width = 220; c.height = 60;
-    var ctx = c.getContext('2d');
-    ctx.textBaseline = 'top'; ctx.font = '16px Arial';
-    ctx.fillStyle = '#f60'; ctx.fillRect(125, 1, 62, 20);
-    ctx.fillStyle = '#069'; ctx.fillText('EternalKey', 2, 15);
-    ctx.fillStyle = 'rgba(102,204,0,0.7)'; ctx.fillText('EternalKey', 4, 17);
-    parts.push('c:' + c.toDataURL());
-  } catch(e){ parts.push('c:none'); }
-  try {
-    var gl = document.createElement('canvas').getContext('webgl');
-    if (gl){
-      var ext = gl.getExtension('WEBGL_debug_renderer_info');
-      if (ext){
-        parts.push('v:' + gl.getParameter(ext.UNMASKED_VENDOR_WEBGL));
-        parts.push('r:' + gl.getParameter(ext.UNMASKED_RENDERER_WEBGL));
-      }
-      parts.push('p:' + gl.getParameter(gl.VERSION));
-    }
-  } catch(e){ parts.push('v:none'); }
-  parts.push('hc:' + (navigator.hardwareConcurrency || 0));
-  parts.push('pf:' + (navigator.platform || ''));
-  parts.push('sc:' + screen.width + 'x' + screen.height + 'x' + screen.colorDepth);
-  parts.push('tz:' + (Intl.DateTimeFormat().resolvedOptions().timeZone || ''));
-  parts.push('lg:' + (navigator.language || ''));
+  try { var c=document.createElement('canvas'); c.width=220; c.height=60; var x=c.getContext('2d'); x.textBaseline='top'; x.font='16px Arial'; x.fillStyle='#f60'; x.fillRect(125,1,62,20); x.fillStyle='#069'; x.fillText('EternalKey',2,15); x.fillStyle='rgba(102,204,0,0.7)'; x.fillText('EternalKey',4,17); parts.push('c:'+c.toDataURL()); } catch(e){ parts.push('c:none'); }
+  try { var gl=document.createElement('canvas').getContext('webgl'); if(gl){ var ext=gl.getExtension('WEBGL_debug_renderer_info'); if(ext){ parts.push('v:'+gl.getParameter(ext.UNMASKED_VENDOR_WEBGL)); parts.push('r:'+gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)); } parts.push('p:'+gl.getParameter(gl.VERSION)); } } catch(e){ parts.push('v:none'); }
+  parts.push('hc:'+(navigator.hardwareConcurrency||0));
+  parts.push('pf:'+(navigator.platform||''));
+  parts.push('sc:'+screen.width+'x'+screen.height+'x'+screen.colorDepth);
+  parts.push('tz:'+(Intl.DateTimeFormat().resolvedOptions().timeZone||''));
+  parts.push('lg:'+(navigator.language||''));
   var buf = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(parts.join('|')));
   var hex = [].slice.call(new Uint8Array(buf)).map(function(b){ return b.toString(16).padStart(2,'0'); }).join('').toUpperCase();
-  return (hex.slice(0,32).match(/.{4}/g) || []).join('-');
+  return (hex.slice(0,32).match(/.{4}/g)||[]).join('-');
 }
 
 gateInput.addEventListener('input', function(e){
@@ -117,12 +97,10 @@ btnValidate.addEventListener('click', async function(){
   var raw = gateInput.value.trim().toUpperCase();
   if (raw.length !== 19){ showError('Preencha a chave completa'); return; }
   if (!/^ETNX-[A-Z0-9]{4}-[A-Z0-9]{4}-[A-Z0-9]{4}$/.test(raw)){ showError('Formato inválido.'); return; }
-
   btnValidate.disabled = true;
   btnValidate.innerHTML = '<i class="fas fa-circle-notch spin"></i> Verificando...';
   gateError.classList.remove('show');
   gateInput.classList.remove('error');
-
   try {
     var hwid = await computeHWID();
     var res  = await fetch(WORKER_URL + '/validate', {
